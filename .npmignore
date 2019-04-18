@@ -1,0 +1,12 @@
+/pack.*
+/*.tgz
+/.gitignore
+/.gitattributes
+/.nojekyll
+/.vscode
+/dist/tests/
+/docs
+/src
+/tsconfig.json
+/tslint.json
+/welcome.md

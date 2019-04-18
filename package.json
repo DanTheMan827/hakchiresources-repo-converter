@@ -1,0 +1,42 @@
+{
+  "name": "hakchiresources-repo-converter",
+  "version": "1.0.0",
+  "description": "Converts https://hakchiresources.com/api/get_posts/?count=10000 into a .hrepo file",
+  "main": "dist/_index.js",
+  "types": "dist/_index.d.ts",
+  "bin": "./dist/_index.js",
+  "scripts": {
+    "clean": "npm run-script clean-dist && npm run-script clean-docs",
+    "clean-dist": "del-cli ./dist",
+    "clean-docs": "del-cli ./docs",
+    "build-dist": "npm run-script clean-dist && tsc",
+    "build-docs": "npm run-script clean-docs && typedoc --theme minimal --out ./docs/ --excludePrivate --mode modules --exclude \"**/*/_*.ts\" ./src/",
+    "build-package": "npm run-script build-dist && npm pack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanTheMan827/hakchiresources-repo-converter.git"
+  },
+  "author": "DanTheMan827",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/DanTheMan827/hakchiresources-repo-converter/issues"
+  },
+  "homepage": "https://github.com/DanTheMan827/hakchiresources-repo-converter#readme",
+  "devDependencies": {
+    "@types/request-promise-native": "^1.0.15",
+    "@types/tar-stream": "^1.6.0",
+    "del-cli": "^1.1.0",
+    "tslint": "^5.12.1",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "html-entities": "^1.2.1",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "tar-stream": "^2.0.1",
+    "title-case": "^2.1.1"
+  }
+}
