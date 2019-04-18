@@ -13,19 +13,8 @@ const titleCase = require('title-case')
 const gzip = zlib.createGzip()
 const jsonUrl = "https://hakchiresources.com/api/get_posts/?count=10000"
 
-function packPromise(pack: tar.Pack, headers: tar.Headers, data: string | Buffer) {
-  return new Promise((resolve, reject) => {
-    const entry = pack.entry(headers, data, (err) => {
-      if (err) {
-        reject(err)
-      }
-    })
-    entry.end(resolve)
-  })
-}
-
-async function Main() {
-  const json: Posts = JSON.parse(await request.get(jsonUrl))
+request.get(jsonUrl).then((jsonData) => {
+  const json: Posts = JSON.parse(jsonData)
 
   const pack = tar.pack()
   const list = []
@@ -90,22 +79,20 @@ async function Main() {
 
     const readme = `---\n${readmeMetaLines.join("\n")}\n---\n${post.content}`
 
-    await packPromise(pack, { name: `${modRepoName}/readme.md` }, readme)
-    await packPromise(pack, { name: `${modRepoName}/link` }, path)
+    pack.entry({ name: `${modRepoName}/readme.md` }, readme)
+    pack.entry({ name: `${modRepoName}/link` }, path)
 
     list.push(modRepoName)
   }
 
-  await packPromise(pack, { name: "list" }, list.join("\n"))
+  pack.entry({ name: "list" }, list.join("\n"))
 
   if (fs.existsSync("welcome.md")) {
-    await packPromise(pack, { name: "readme.md" }, fs.readFileSync("welcome.md"))
+    pack.entry({ name: "readme.md" }, fs.readFileSync("welcome.md"))
   }
 
   pack.finalize()
 
   const out = fs.createWriteStream("pack.tgz")
   pack.pipe(gzip).pipe(out)
-}
-
-Main()
+})
